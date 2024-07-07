@@ -6,18 +6,18 @@ const port = process.env.PORT || 3000;
 app.use(express.text());
 app.use(cors());
 
-const jsContent = `
-(function() {
-    console.log('Hello, this is the content of 1.js served as text.');
-    // Your JS code goes here...
-})();
-`;
+// Define the path to the .js file in the root directory
+const jsFilePath = path.join(__dirname, '1.js');
 
-// Define the route for serving the JS content
+// Define the route for serving the .js file from the disk
 app.get('/1.js', (req, res) => {
-    // Serve the JS content as application/javascript
-    res.type('application/javascript');
-    res.send(jsContent);
+    // Serve the file from the disk
+    res.sendFile(jsFilePath, (err) => {
+        if (err) {
+            console.error('Error serving the file:', err);
+            res.status(500).send('Server Error');
+        }
+    });
 });
 
 let counters = {
