@@ -22,8 +22,8 @@ app.get('/1.js', (req, res) => {
 });
 
 let counters = {
-    "g-": 0,
-    "s-": 6374
+    "g-": 103053,
+    "s-": 5452
 };
 
 let receivedCounters = {
