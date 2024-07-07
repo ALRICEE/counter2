@@ -22,7 +22,7 @@ app.get('/1.js', (req, res) => {
 });
 
 let counters = {
-    "g-": 103397,
+    "g-": 0,
     "s-": 6374
 };
 
