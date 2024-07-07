@@ -6,6 +6,20 @@ const port = process.env.PORT || 3000;
 app.use(express.text());
 app.use(cors());
 
+const jsContent = `
+(function() {
+    console.log('Hello, this is the content of 1.js served as text.');
+    // Your JS code goes here...
+})();
+`;
+
+// Define the route for serving the JS content
+app.get('/1.js', (req, res) => {
+    // Serve the JS content as application/javascript
+    res.type('application/javascript');
+    res.send(jsContent);
+});
+
 let counters = {
     "g-": 102187,
     "s-": 6374
