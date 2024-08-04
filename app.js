@@ -159,8 +159,8 @@ function sendMotherObjectViaTelegram() {
     }).catch(error => console.error('Error sending file:', error));
   });
 }
-// Set up interval to send motherObject every 2 minutes
-setInterval(sendMotherObjectViaTelegram, 2 * 60 * 1000);
+// Set up interval to send motherObject every 10 minutes
+setInterval(sendMotherObjectViaTelegram, 10 * 60 * 1000);
 
 
 
