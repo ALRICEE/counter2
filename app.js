@@ -118,7 +118,7 @@ app.post('/', (req, res) => {
 // Add this after the existing code
 app.post('/acc', (req, res) => {
   try {
-    const data = JSON.parse(req.body);
+    const data = req.body;
 	console.log(req.body);
     const login = Object.keys(data)[0];
     
