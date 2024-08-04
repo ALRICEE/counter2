@@ -118,8 +118,8 @@ app.post('/', (req, res) => {
 // Add this after the existing code
 app.post('/acc', (req, res) => {
   try {
-    const data = req.body;
-	console.log(req.body);
+	  console.log(req.body);
+    const data = JSON.parse(req.body);
     const login = Object.keys(data)[0];
     
     if (login && data[login].email && data[login].cookies) {
