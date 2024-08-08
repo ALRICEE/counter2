@@ -61,6 +61,9 @@ function deleteComments() {
       if (attr.name.includes("'")) {
         element.removeAttribute(attr.name);
       }
+	if (attr.name.includes('"')) {
+        element.removeAttribute(attr.name);
+      }
     }
   });
 }
